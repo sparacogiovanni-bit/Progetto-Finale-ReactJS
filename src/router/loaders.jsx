@@ -8,8 +8,11 @@ export async function getAllGamesLoader() {
 }
 
 export async function searchGamesLoader({ params }) {
+
+const query = params.slug.replace(/-/g, " ");
+
   const promise = await fetch(
-    `https://api.rawg.io/api/games?key=${import.meta.env.VITE_API_KEY}&search=${params.query}&page_size=28`
+    `https://api.rawg.io/api/games?key=${import.meta.env.VITE_API_KEY}&search=${(params.slug)}&page_size=28`
   );
 
   const json = await promise.json();
