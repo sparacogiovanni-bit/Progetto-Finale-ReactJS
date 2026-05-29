@@ -7,21 +7,21 @@ export default function Navbar() {
   const navigate = useNavigate();
   
   const handleSearch = (e) => {
-  e.preventDefault();
-
-  if (!search.trim()) return;
-
-  const slug = search
+    e.preventDefault();
+    
+    if (!search.trim()) return;
+    
+    const slug = search
     .toLowerCase()
     .trim()
     .replace(/\s+/g, "-");
-
-  navigate(`/search/${slug}`);
-  setSearch("");
-};
+    
+    navigate(`/search/${slug}`);
+    setSearch("");
+  };
   
   return (
-    <nav className="bg-black text-white px-6 py-4 flex items-center justify-between">
+    <nav className="bg-nav-bluegray text-white px-4 py-4 flex items-center justify-between gap-3">
     
     
     <Link
@@ -32,7 +32,7 @@ export default function Navbar() {
     </Link>
     
     
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-2 flex-1 justify-end">
     
     
     <form
@@ -47,19 +47,22 @@ export default function Navbar() {
     className="
               input
               input-bordered
-              rounded-r-none
-              w-64
-              bg-nav-gray
-              text-white
-              placeholder-white
-              border-gray-700
-              focus:outline-none
+    rounded-r-none
+    w-full
+    max-w-[160px]
+    sm:max-w-xs
+    bg-nav-bluegray
+    text-white
+    placeholder-white
+    border-gray-700
+    focus:outline-none
+    font-electro
             "
     />
     
     <button
     type="submit"
-    className="btn btn-square rounded-l-none bg-nav-dark border-gray-700 hover:bg-gray-700 text-white"
+    className="btn btn-square rounded-l-none bg-nav-bluegray border-gray-700 hover:bg-gray-700 text-white"
     >
     <FaSearch />
     </button>

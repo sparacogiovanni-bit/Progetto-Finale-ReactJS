@@ -7,8 +7,8 @@
 @theme {
   --font-roboto: "Roboto", sans-serif;
   --font-electro: "Electrolize", sans-serif;
-  --color-nav-gray: #111827;
-  --color-nav-dark: #1f2937;
+  --color-nav-bluenavy: #111827;
+  --color-nav-bluegray: #1f2937;
 }
 
 @plugin "daisyui";

@@ -9,10 +9,27 @@ export async function getAllGamesLoader() {
 
 export async function searchGamesLoader({ params }) {
 
-const query = params.slug.replace(/-/g, " ");
+  const query = params.slug.replace(/-/g, " ");
 
   const promise = await fetch(
-    `https://api.rawg.io/api/games?key=${import.meta.env.VITE_API_KEY}&search=${(params.slug)}&page_size=28`
+    `https://api.rawg.io/api/games?key=${import.meta.env.VITE_API_KEY}&search=${query}&page_size=28`
+  );
+
+  const json = await promise.json();
+  return json.results;
+}
+
+export async function getAllGenres() {
+  const promise = await fetch(`https://api.rawg.io/api/genres?key=${import.meta.env.VITE_API_KEY}`
+  );
+
+  const json = await promise.json();
+  return json.results;
+}
+
+export async function getFilteredByGenreGames({ params }) {
+  const promise = await fetch(
+    `https://api.rawg.io/api/games?key=${import.meta.env.VITE_API_KEY}&genres=${params.slug}`
   );
 
   const json = await promise.json();

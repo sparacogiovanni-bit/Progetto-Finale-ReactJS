@@ -2,12 +2,12 @@ import { FaInstagram, FaFacebook, FaDiscord, FaXTwitter } from "react-icons/fa6"
 
 export default function Footer() {
   return (
-    <footer className="bg-black text-white mt-10 p-6">
+    <footer className="bg-nav-bluegray font-electro text-white mt-10 p-6">
     
     <div className="flex flex-col md:flex-row items-center justify-between gap-4">
     
     <p className="text-sm md:text-base">
-    © {new Date().getFullYear()} Reactor - All rights reserved
+    © {new Date().getFullYear()} Reactor - Tutti i diritti riservati
     </p>
     
     <div className="flex gap-6 text-2xl text-gray-400">
