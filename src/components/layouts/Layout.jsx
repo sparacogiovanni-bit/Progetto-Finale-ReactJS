@@ -18,7 +18,7 @@ export default function Layout() {
           <Sidebar genres={genres} />
         </div>
 
-        <div className="w-full md:col-span-6 bg-base-100 rounded-bl-3xl">
+        <div className="w-full md:col-span-6 bg-base-100 rounded-bl-3xl flex flex-col">
           <Outlet />
         </div>
       </section>
