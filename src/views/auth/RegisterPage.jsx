@@ -1,5 +1,7 @@
+import { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../../context/UserContext";
 
 export default function RegisterPage() {
   const {
@@ -8,7 +10,33 @@ export default function RegisterPage() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => console.log(data);
+  const { signUp } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  const onSubmit = async (user_data) => {
+    try {
+      const { error } = await signUp({
+        email: user_data.email,
+        password: user_data.password,
+        metadata: {
+          first_name: user_data.first_name,
+          last_name: user_data.last_name,
+          username: user_data.username,
+        },
+      });
+
+      if (error) {
+        alert(error.message);
+        return;
+      }
+
+      alert("Registrazione completata!");
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+      alert("Si è verificato un errore.");
+    }
+  };
 
   return (
     <div className="hero flex-1 font-electro">
@@ -25,13 +53,43 @@ export default function RegisterPage() {
             <input
               className="input input-bordered w-full"
               placeholder="Nome"
-              {...register("name", {
+              {...register("first_name", {
                 required: "Nome obbligatorio",
               })}
             />
-            {errors.name && (
+            {errors.first_name && (
               <span className="text-error text-sm">
-                {errors.name.message}
+                {errors.first_name.message}
+              </span>
+            )}
+
+            <input
+              className="input input-bordered w-full"
+              placeholder="Cognome"
+              {...register("last_name", {
+                required: "Cognome obbligatorio",
+              })}
+            />
+            {errors.last_name && (
+              <span className="text-error text-sm">
+                {errors.last_name.message}
+              </span>
+            )}
+
+            <input
+              className="input input-bordered w-full"
+              placeholder="Username"
+              {...register("username", {
+                required: "Username obbligatorio",
+                minLength: {
+                  value: 3,
+                  message: "Minimo 3 caratteri",
+                },
+              })}
+            />
+            {errors.username && (
+              <span className="text-error text-sm">
+                {errors.username.message}
               </span>
             )}
 
@@ -55,6 +113,10 @@ export default function RegisterPage() {
               placeholder="Password"
               {...register("password", {
                 required: "Password obbligatoria",
+                minLength: {
+                  value: 6,
+                  message: "La password deve contenere almeno 6 caratteri",
+                },
               })}
             />
             {errors.password && (
@@ -63,7 +125,7 @@ export default function RegisterPage() {
               </span>
             )}
 
-            <button className="btn btn-primary">
+            <button type="submit" className="btn btn-primary">
               Registrati
             </button>
 
