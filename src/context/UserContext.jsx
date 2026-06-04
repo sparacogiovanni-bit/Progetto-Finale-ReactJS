@@ -11,45 +11,67 @@ export function UserContextProvider({ children }) {
   const getUser = async () => {
     setLoading(true);
 
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
-    if (!session) {
-      setUser(null);
-      setProfile(null);
+      if (!session) {
+        setUser(null);
+        setProfile(null);
+        return;
+      }
+
+      const currentUser = session.user;
+      setUser(currentUser);
+
+      console.log("USER ID:", currentUser.id);
+
+      const { data: profileData, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", currentUser.id)
+        .single();
+
+      console.log("PROFILE:", profileData);
+      console.log("ERROR:", error);
+
+      if (error) {
+        console.error("Errore caricamento profilo:", error);
+        setProfile(null);
+        return;
+      }
+
+      setProfile(profileData);
+    } catch (err) {
+      console.error("Errore getUser:", err);
+    } finally {
       setLoading(false);
-      return;
     }
-
-    const currentUser = session.user;
-    setUser(currentUser);
-
-    const { data: profileData } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", currentUser.id)
-      .single();
-
-    setProfile(profileData || null);
-
-    setLoading(false);
   };
 
   useEffect(() => {
     getUser();
 
-    const { data: listener } = supabase.auth.onAuthStateChange(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(() => {
       getUser();
     });
 
     return () => {
-      listener.subscription.unsubscribe();
+      subscription.unsubscribe();
     };
   }, []);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
     setUser(null);
     setProfile(null);
   };

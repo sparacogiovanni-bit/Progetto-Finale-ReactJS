@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaSearch, FaBars } from "react-icons/fa";
 import routes from "../../../router/routes";
 import { UserContext } from "../../../context/UserContext";
+import defaultAvatar from "../../../assets/spider.webp";
 
 export default function Navbar() {
   const [search, setSearch] = useState("");
@@ -11,7 +12,9 @@ export default function Navbar() {
 
   const navigate = useNavigate();
 
-  const { user, signOut } = useContext(UserContext);
+  const { user, profile, signOut } = useContext(UserContext);
+
+  const avatarSrc = profile?.avatar_url || defaultAvatar;
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -96,14 +99,22 @@ export default function Navbar() {
             >
               <div className="w-10 rounded-full">
                 <img
-                  src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp"
-                  alt="profile"
+                  src={avatarSrc}
+                  alt="Avatar utente"
                 />
               </div>
             </div>
 
             {profileOpen && (
               <div className="absolute right-0 top-12 bg-nav-bluegray border border-gray-700 rounded-lg shadow-lg w-40 z-50 overflow-hidden">
+                <Link
+                  to={routes.profile}
+                  onClick={() => setProfileOpen(false)}
+                  className="block px-4 py-3 text-white font-electro hover:bg-gray-700 transition"
+                >
+                  Profilo
+                </Link>
+
                 <button
                   onClick={handleLogout}
                   className="w-full text-left px-4 py-3 text-white font-electro hover:bg-gray-700 transition"
@@ -144,12 +155,22 @@ export default function Navbar() {
               </Link>
             </>
           ) : (
-            <button
-              onClick={handleLogout}
-              className="text-left px-3 py-2 rounded-lg hover:bg-gray-700 font-electro"
-            >
-              Logout
-            </button>
+            <>
+              <Link
+                to={routes.profile}
+                className={linkStyle}
+                onClick={() => setMenuOpen(false)}
+              >
+                Profilo
+              </Link>
+
+              <button
+                onClick={handleLogout}
+                className="text-left px-3 py-2 rounded-lg hover:bg-gray-700 font-electro"
+              >
+                Logout
+              </button>
+            </>
           )}
         </div>
       )}
