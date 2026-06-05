@@ -7,7 +7,10 @@ import GenrePage from "../views/GenrePage";
 import LoginPage from "../views/auth/LoginPage";
 import RegisterPage from "../views/auth/RegisterPage";
 import ProfilePage from "../views/auth/ProfilePage";
+import ProfileSettingsPage from "../views/auth/ProfileSettingsPage";
 import routes from "./routes";
+
+
 import {
   getAllGamesLoader,
   searchGamesLoader,
@@ -20,7 +23,6 @@ const router = createBrowserRouter([
     path: routes.home,
     Component: Layout,
     loader: getAllGenres,
-
     children: [
       {
         index: true,
@@ -43,7 +45,6 @@ const router = createBrowserRouter([
   {
     path: "/auth",
     Component: AuthenticationLayout,
-
     children: [
       {
         path: "login",
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
       {
         path: "profile",
         Component: ProfilePage,
+      },
+      {
+        path: "profile/settings",
+        Component: ProfileSettingsPage,
       },
     ],
   },

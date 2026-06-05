@@ -8,6 +8,7 @@ export function UserContextProvider({ children }) {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  
   const getUser = async () => {
     setLoading(true);
 
@@ -25,16 +26,11 @@ export function UserContextProvider({ children }) {
       const currentUser = session.user;
       setUser(currentUser);
 
-      console.log("USER ID:", currentUser.id);
-
       const { data: profileData, error } = await supabase
         .from("profiles")
         .select("*")
         .eq("id", currentUser.id)
         .single();
-
-      console.log("PROFILE:", profileData);
-      console.log("ERROR:", error);
 
       if (error) {
         console.error("Errore caricamento profilo:", error);
@@ -50,6 +46,25 @@ export function UserContextProvider({ children }) {
     }
   };
 
+  
+  const updateProfile = async (newProfile) => {
+    if (!user) return;
+
+    const { error } = await supabase
+      .from("profiles")
+      .update(newProfile)
+      .eq("id", user.id);
+
+    if (error) {
+      console.error("Errore aggiornamento profilo:", error);
+      return { error };
+    }
+
+    await getUser(); 
+    return { success: true };
+  };
+
+  
   useEffect(() => {
     getUser();
 
@@ -64,18 +79,18 @@ export function UserContextProvider({ children }) {
     };
   }, []);
 
+  
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
-
     if (error) {
       console.error(error);
       return;
     }
-
     setUser(null);
     setProfile(null);
   };
 
+  
   const signUp = async ({ email, password, metadata }) => {
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -84,16 +99,15 @@ export function UserContextProvider({ children }) {
         data: metadata,
       },
     });
-
     return { data, error };
   };
 
+  
   const login = async ({ email, password }) => {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
-
     return { data, error };
   };
 
@@ -106,6 +120,8 @@ export function UserContextProvider({ children }) {
         signUp,
         login,
         signOut,
+        updateProfile,
+        getUser,
       }}
     >
       {children}

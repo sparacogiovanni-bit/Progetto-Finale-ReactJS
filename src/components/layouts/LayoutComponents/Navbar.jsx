@@ -1,31 +1,39 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaSearch, FaBars } from "react-icons/fa";
 import routes from "../../../router/routes";
 import { UserContext } from "../../../context/UserContext";
+import { supabase } from "../../../database/supabase";
 import defaultAvatar from "../../../assets/spider.webp";
 
 export default function Navbar() {
   const [search, setSearch] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [avatarSrc, setAvatarSrc] = useState(defaultAvatar);
 
   const navigate = useNavigate();
-
   const { user, profile, signOut } = useContext(UserContext);
 
-  const avatarSrc = profile?.avatar_url || defaultAvatar;
+  
+  useEffect(() => {
+    if (!profile?.avatar_url) {
+      setAvatarSrc(defaultAvatar);
+      return;
+    }
+
+    const { data } = supabase.storage
+      .from("avatars")
+      .getPublicUrl(profile.avatar_url);
+
+    setAvatarSrc(data.publicUrl);
+  }, [profile]);
 
   const handleSearch = (e) => {
     e.preventDefault();
-
     if (!search.trim()) return;
 
-    const slug = search
-      .toLowerCase()
-      .trim()
-      .replace(/\s+/g, "-");
-
+    const slug = search.toLowerCase().trim().replace(/\s+/g, "-");
     navigate(`/search/${slug}`);
     setSearch("");
   };
@@ -66,7 +74,6 @@ export default function Navbar() {
               font-electro
             "
           />
-
           <button
             type="submit"
             className="btn btn-square rounded-l-none bg-nav-bluegray border-gray-700 hover:bg-gray-700 text-white"
@@ -82,7 +89,6 @@ export default function Navbar() {
                 Registrati
               </Link>
             </li>
-
             <li>
               <Link to={routes.login} className={linkStyle}>
                 Accedi
@@ -98,10 +104,7 @@ export default function Navbar() {
               className="avatar cursor-pointer"
             >
               <div className="w-10 rounded-full">
-                <img
-                  src={avatarSrc}
-                  alt="Avatar utente"
-                />
+                <img src={avatarSrc} alt="Avatar utente" className="object-cover" />
               </div>
             </div>
 
@@ -145,7 +148,6 @@ export default function Navbar() {
               >
                 Registrati
               </Link>
-
               <Link
                 to={routes.login}
                 className={linkStyle}
