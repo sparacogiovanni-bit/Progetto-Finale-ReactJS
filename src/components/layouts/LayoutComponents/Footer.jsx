@@ -7,7 +7,7 @@ export default function Footer() {
     <div className="flex flex-col md:flex-row items-center justify-between gap-4">
     
     <p className="text-sm md:text-base">
-    © {new Date().getFullYear()} Reactor - Tutti i diritti riservati
+    © {new Date().getFullYear()} Reactor • All rights reserved.
     </p>
     
     <div className="flex gap-6 text-2xl text-gray-400">

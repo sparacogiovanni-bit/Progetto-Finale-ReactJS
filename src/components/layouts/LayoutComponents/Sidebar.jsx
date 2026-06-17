@@ -1,45 +1,31 @@
-import { Link } from "react-router-dom";
-
-const genreLabels = {
-  action: "Azione",
-  indie: "Indie",
-  adventure: "Avventura",
-  rpg: "GDR",
-  strategy: "Strategia",
-  shooter: "Sparatutto",
-  casual: "Casual",
-  simulation: "Simulazione",
-  puzzle: "Puzzle",
-  arcade: "Arcade",
-  platformer: "Platform",
-  "massively multiplayer": "Multigiocatore Massivo",
-  racing: "Corse",
-  sports: "Sport",
-  fighting: "Picchiaduro",
-  family: "Famiglia",
-  "board games": "Giochi da Tavolo",
-  card: "Carte",
-  educational: "Educativi",
-};
+import { Link, useLocation } from "react-router-dom";
 
 export default function Sidebar({ genres }) {
+  const location = useLocation();
+
   return (
     <nav className="overflow-x-auto md:overflow-visible font-electro">
-      <ul className="flex md:flex-col gap-2 p-3 whitespace-nowrap">
-        {genres.map((genre) => {
-          const key = genre.name?.toLowerCase().trim().replace(/\s+/g, " ");
+      
+      <h2 className="text-xs opacity-50 mt-2 mb-1 text-center md:text-left md:px-5">
+          GENRES
+        </h2>
+      
+      <ul className="flex md:flex-col gap-2 p-2 whitespace-nowrap">
 
-          return (
-            <li className="flex-shrink-0" key={genre.id}>
-              <Link
-                className="block px-3 py-2 rounded-lg hover:bg-gray-700 transition text-white"
-                to={`/genre/${genre.slug || genre.id}`}
-              >
-                {genreLabels[key] || genre.name}
-              </Link>
-            </li>
-          );
-        })}
+        {genres.map((genre) => (
+          <li className="flex-shrink-0" key={genre.id}>
+            <Link
+              className={`block px-3 py-2 rounded-lg transition text-white ${
+                location.pathname === `/genre/${genre.slug || genre.id}`
+                  ? "bg-primary"
+                  : "hover:bg-gray-700"
+              }`}
+              to={`/genre/${genre.slug || genre.id}`}
+            >
+              {genre.name}
+            </Link>
+          </li>
+        ))}
       </ul>
     </nav>
   );

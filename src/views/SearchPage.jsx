@@ -8,7 +8,7 @@ export default function SearchPage() {
   return (
     <>
       <h1 className="text-center text-2xl font-electro">
-        Risultati per "{slug}"
+        Results for "{slug}"
       </h1>
 
       <GameList>

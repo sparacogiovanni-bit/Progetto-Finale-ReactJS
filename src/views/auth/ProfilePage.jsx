@@ -8,19 +8,31 @@ import defaultAvatar from "../../assets/spider.webp";
 export default function ProfilePage() {
   const { user, profile, loading } = useContext(UserContext);
   const [avatarSrc, setAvatarSrc] = useState(defaultAvatar);
+  const [userFavourites, setUserFavourites] = useState();
+
+  const get_favourites = async () => {
+    if (profile) {
+      let { data: favourites, error } = await supabase
+        .from("favourites")
+        .select("*")
+        .eq("profile_id", profile.id);
+
+      setUserFavourites(favourites);
+    }
+  };
 
   useEffect(() => {
     if (!profile?.avatar_url) {
       setAvatarSrc(defaultAvatar);
-      return;
+    } else {
+      const { data } = supabase.storage
+        .from("avatars")
+        .getPublicUrl(profile.avatar_url);
+
+      setAvatarSrc(data.publicUrl);
     }
 
-    
-    const { data } = supabase.storage
-      .from("avatars")
-      .getPublicUrl(profile.avatar_url);
-
-    setAvatarSrc(data.publicUrl);
+    get_favourites();
   }, [profile]);
 
   if (loading) {
@@ -35,7 +47,7 @@ export default function ProfilePage() {
     return (
       <div className="h-full flex items-center justify-center">
         <p className="text-lg font-electro">
-          Devi effettuare il login per vedere il profilo.
+          You must be logged in to view your profile.
         </p>
       </div>
     );
@@ -44,7 +56,7 @@ export default function ProfilePage() {
   if (!profile) {
     return (
       <div className="h-full flex items-center justify-center">
-        <p className="text-lg">Profilo non trovato.</p>
+        <p className="text-lg">Profile not found.</p>
       </div>
     );
   }
@@ -55,31 +67,52 @@ export default function ProfilePage() {
         <div className="flex flex-col items-center gap-4">
           <img
             src={avatarSrc}
-            alt="Avatar utente"
+            alt="User Avatar"
             className="w-32 h-32 rounded-full object-cover border-4 border-primary"
           />
 
           <h1 className="text-3xl text-center">
-            {profile?.username || "Profilo Utente"}
+            {profile?.username || "User Profile"}
           </h1>
         </div>
 
         <div className="divider my-6"></div>
 
+        <section className="my-10">
+          <h2 className="text-2xl text-center mb-6">Favorite Games</h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {userFavourites &&
+              userFavourites.map((game) => (
+                <div className="card bg-base-100 shadow-sm" key={game.id}>
+                  <div className="card-body">
+                    <h2 className="card-title">{game.game_name}</h2>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </section>
+
+        <div className="divider my-8"></div>
+
+        <h2 className="text-2xl text-center mb-6">
+          Profile Information
+        </h2>
+
         <div className="grid md:grid-cols-2 gap-4">
           <div className="bg-base-100 p-4 rounded-xl">
             <h2 className="text-sm font-bold opacity-70">Username</h2>
-            <p>{profile?.username || "Non disponibile"}</p>
+            <p>{profile?.username || "Not available"}</p>
           </div>
 
           <div className="bg-base-100 p-4 rounded-xl">
-            <h2 className="text-sm font-bold opacity-70">Nome</h2>
-            <p>{profile?.first_name || "Non disponibile"}</p>
+            <h2 className="text-sm font-bold opacity-70">First Name</h2>
+            <p>{profile?.first_name || "Not available"}</p>
           </div>
 
           <div className="bg-base-100 p-4 rounded-xl">
-            <h2 className="text-sm font-bold opacity-70">Cognome</h2>
-            <p>{profile?.last_name || "Non disponibile"}</p>
+            <h2 className="text-sm font-bold opacity-70">Last Name</h2>
+            <p>{profile?.last_name || "Not available"}</p>
           </div>
 
           <div className="bg-base-100 p-4 rounded-xl">
@@ -88,7 +121,7 @@ export default function ProfilePage() {
           </div>
 
           <div className="bg-base-100 p-4 rounded-xl md:col-span-2">
-            <h2 className="text-sm font-bold opacity-70">ID Utente</h2>
+            <h2 className="text-sm font-bold opacity-70">User ID</h2>
             <p className="break-all text-sm">{user.id}</p>
           </div>
         </div>
@@ -98,7 +131,7 @@ export default function ProfilePage() {
             to={`${routes.profile}/settings`}
             className="btn btn-primary px-8"
           >
-            Modifica profilo
+            Edit Profile
           </Link>
         </div>
       </div>

@@ -33,14 +33,14 @@ export function UserContextProvider({ children }) {
         .single();
 
       if (error) {
-        console.error("Errore caricamento profilo:", error);
+        console.error("Error loading profile:", error);
         setProfile(null);
         return;
       }
 
       setProfile(profileData);
     } catch (err) {
-      console.error("Errore getUser:", err);
+      console.error("Error getting user:", err);
     } finally {
       setLoading(false);
     }
@@ -56,7 +56,7 @@ export function UserContextProvider({ children }) {
       .eq("id", user.id);
 
     if (error) {
-      console.error("Errore aggiornamento profilo:", error);
+      console.error("Error updating profile:", error);
       return { error };
     }
 

@@ -7,7 +7,7 @@ export default function Homepage() {
   return (
     <>
       <h1 className="font-electro text-3xl text-center font-bold">
-        Reactor
+        Games
       </h1>
 
       <GameList>

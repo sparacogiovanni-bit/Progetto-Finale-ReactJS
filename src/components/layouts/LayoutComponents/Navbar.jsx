@@ -58,7 +58,7 @@ export default function Navbar() {
         <form onSubmit={handleSearch} className="flex items-center">
           <input
             type="text"
-            placeholder="Cerca i giochi..."
+            placeholder="Search games..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="
@@ -86,12 +86,12 @@ export default function Navbar() {
           <ul className="hidden md:flex items-center gap-3 font-electro">
             <li>
               <Link to={routes.register} className={linkStyle}>
-                Registrati
+                Sign Up
               </Link>
             </li>
             <li>
               <Link to={routes.login} className={linkStyle}>
-                Accedi
+                Sign In
               </Link>
             </li>
           </ul>
@@ -104,7 +104,7 @@ export default function Navbar() {
               className="avatar cursor-pointer"
             >
               <div className="w-10 rounded-full">
-                <img src={avatarSrc} alt="Avatar utente" className="object-cover" />
+                <img src={avatarSrc} alt="User Avatar" className="object-cover" />
               </div>
             </div>
 
@@ -115,7 +115,7 @@ export default function Navbar() {
                   onClick={() => setProfileOpen(false)}
                   className="block px-4 py-3 text-white font-electro hover:bg-gray-700 transition"
                 >
-                  Profilo
+                  Profile
                 </Link>
 
                 <button
@@ -146,14 +146,14 @@ export default function Navbar() {
                 className={linkStyle}
                 onClick={() => setMenuOpen(false)}
               >
-                Registrati
+                Sign Up
               </Link>
               <Link
                 to={routes.login}
                 className={linkStyle}
                 onClick={() => setMenuOpen(false)}
               >
-                Accedi
+                Sign In
               </Link>
             </>
           ) : (
@@ -163,7 +163,7 @@ export default function Navbar() {
                 className={linkStyle}
                 onClick={() => setMenuOpen(false)}
               >
-                Profilo
+                Profile
               </Link>
 
               <button
