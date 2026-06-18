@@ -12,13 +12,14 @@ export default function DetailPage() {
 
   return (
     <main
+      className="relative min-h-screen bg-center bg-cover bg-fixed"    
       style={{
-        backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),url(${game.background_image})`,
+        backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),url(${game.background_image})`,       
       }}
-      className="min-h-screen bg-center bg-cover bg-no-repeat"
     >
+
       <FaCircleArrowLeft
-        className="absolute top-24 left-60 text-4xl text-white cursor-pointer z-50"
+        className="absolute top-6 left-[2%] text-4xl text-white cursor-pointer z-50"
         onClick={() => navigate(-1)}
       />
 
